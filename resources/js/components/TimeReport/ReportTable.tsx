@@ -4,15 +4,14 @@ import ReportTableRow from './ReportTableRow';
 import SearchInput from './SearchInput';
 import EmptyState from './EmptyState';
 
-const columns = [
-    { key: 'emp_id', label: 'รหัสพนักงาน' },
+const columns = [   
     { key: 'first_name', label: 'ชื่อ-สกุล' },
     { key: 'inout', label: 'สถานะ' },
     { key: 'datetime', label: 'วันที่/เวลา' },
     { key: 'remark', label: 'หมายเหตุ' },
 ];
 
-export default function ReportTable({ data }) {
+export default function ReportTable({ data }: { data: any[] }) {
     const [search, setSearch] = useState('');
     const [sortKey, setSortKey] = useState('datetime');
     const [sortDir, setSortDir] = useState('desc');
@@ -40,7 +39,7 @@ export default function ReportTable({ data }) {
         return rows;
     }, [data, search, sortKey, sortDir]);
 
-    const toggleSort = (key) => {
+    const toggleSort = (key: string) => {
         if (sortKey === key) {
             setSortDir((d) => (d === 'asc' ? 'desc' : 'asc'));
         } else {
@@ -50,15 +49,15 @@ export default function ReportTable({ data }) {
     };
 
     return (
-        <div className="rounded-xl border border-gray-200 bg-white shadow-sm">
+        <div className="rounded-xl border border-gray-200 bg-white shadow-sm ">
             <div className="flex items-center justify-between gap-4 border-b border-gray-200 p-4">
                 <h2 className="text-base font-semibold text-gray-900">รายงานเวลาเข้า-ออกงาน</h2>
                 <SearchInput value={search} onChange={setSearch} />
             </div>
 
-            <div className="overflow-x-auto">
+           <div className="max-h-[70vh] overflow-auto">
                 <table className="min-w-full divide-y divide-gray-200">
-                    <thead className="bg-gray-50">
+                    <thead className="sticky top-0 z-10 bg-gray-50 shadow-sm">
                         <tr>
                             {columns.map((col) => (
                                 <th
@@ -80,7 +79,7 @@ export default function ReportTable({ data }) {
                     </thead>
 
                     <tbody className="divide-y divide-gray-100">
-                        {filtered.map((record, idx) => (
+                        {filtered.map((record: any, idx: number) => (
                             <ReportTableRow key={`${record.emp_id}-${idx}`} record={record} />
                         ))}
                     </tbody>

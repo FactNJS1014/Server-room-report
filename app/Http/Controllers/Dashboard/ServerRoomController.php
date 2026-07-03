@@ -65,8 +65,4 @@ class ServerRoomController extends Controller
         ]);
     }
 
-    public function backMenu()
-    {
-        return redirect('http://172.22.64.11/menu.php');
-    }
 }
