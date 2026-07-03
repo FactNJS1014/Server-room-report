@@ -42,7 +42,7 @@ export default function Error403({ message = "ไม่พบ session หรื�
                 {/* Buttons */}
                 <div className="space-y-2.5">
                     <Link
-                        href={route('back-menu')}
+                        href="http://172.22.64.11/menu.php"
                         className="w-full flex items-center justify-center gap-2 bg-red-600 hover:bg-red-700 text-white text-sm font-medium rounded-lg px-4 py-2.5 transition-colors"
                     >
                         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" className="w-4 h-4" aria-hidden>

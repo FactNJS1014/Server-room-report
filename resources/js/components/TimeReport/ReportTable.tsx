@@ -17,20 +17,6 @@ export default function ReportTable({ data }: { data: any[] }) {
     const [sortKey, setSortKey] = useState('datetime');
     const [sortDir, setSortDir] = useState('desc');
 
-    // state สำหรับ modal
-    const [selectedRecord, setSelectedRecord] = useState(null);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-
-    const handleRemarkClick = (record: any) => {
-        setSelectedRecord(record);
-        setIsModalOpen(true);
-    };
-
-    const closeModal = () => {
-        setIsModalOpen(false);
-        setSelectedRecord(null); // เคลียร์ค่าหลังปิด กัน flash ข้อมูลเก่าตอนเปิดใหม่
-    };
-
     const filtered = useMemo(() => {
         let rows = data;
 
@@ -106,7 +92,7 @@ export default function ReportTable({ data }: { data: any[] }) {
 
                 {filtered.length === 0 && <EmptyState />}
             </div>
-            <RemarkModal record={selectedRecord} isOpen={isModalOpen} onClose={closeModal} />
+<RemarkModal record={selectedRecord} isOpen={isModalOpen} onClose={closeModal} />
            
         </div>
     );
