@@ -40,7 +40,7 @@ class ServerRoomController extends Controller
             $request->session()->forget(['user_info', 'user_info_created_at']);
             abort(403, 'Session หมดอายุ กรุณาเข้าใหม่อีกครั้ง');
         }
-        $timeRecords = DB::table('TTIME_TBL as t')
+        $query = DB::table('TTIME_TBL as t')
         ->leftJoin('VEmployee as e', 't.TTIME_EMPID', '=', 'e.EmpID')
         ->select(
             't.TTIME_EMPID as emp_id',
@@ -50,16 +50,27 @@ class ServerRoomController extends Controller
             'e.FNameTh as first_name',
             'e.LNameTh as last_name'
         )
-        ->orderByDesc('t.TTIME_ISUDT')
-        ->get();
+        ->orderByDesc('t.TTIME_ISUDT');
+        
 
-       
+       // ค้นหา (optional)
+       if ($search = $request->input('search')) {
+           $query->where(function ($q) use ($search) {
+               $q->where('t.TTIME_EMPID', 'like', "%{$search}%")
+                 ->orWhere('e.FNameTh', 'like', "%{$search}%")
+                 ->orWhere('e.LNameTh', 'like', "%{$search}%");
+           });
+       }
+   
+       $timeRecords = $query->paginate(10)->withQueryString();
 
         
         
         return Inertia::render('Dashboard/Report', [
             'data' => $timeRecords,
-          
+            'filters' => [
+                'search' => $request->only(['search']),
+            ],
         ]);
     }
 
