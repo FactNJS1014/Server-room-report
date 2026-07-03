@@ -48,35 +48,36 @@ class ServerRoomController extends Controller
             't.TTIME_ISUDT as datetime',
             't.TTIME_REMK as remark',
             'e.FNameTh as first_name',
-            'e.LNameTh as last_name'
+            'e.LNameTh as last_name',
+            't.TTIME_ID as time_id'
         )
-        ->orderByDesc('t.TTIME_ISUDT');
+        ->orderByDesc('t.TTIME_ISUDT')
+        ->limit(50)
+        ->get();
+
+
         
 
-       // ค้นหา (optional)
-       if ($search = $request->input('search')) {
-           $query->where(function ($q) use ($search) {
-               $q->where('t.TTIME_EMPID', 'like', "%{$search}%")
-                 ->orWhere('e.FNameTh', 'like', "%{$search}%")
-                 ->orWhere('e.LNameTh', 'like', "%{$search}%");
-           });
-       }
-   
-       $timeRecords = $query->paginate(10)->withQueryString();
-
+       
         
         
         return Inertia::render('Dashboard/Report', [
-            'data' => $timeRecords,
-            'filters' => [
-                'search' => $request->only(['search']),
-            ],
+            'data' => $query,
+            
         ]);
     }
 
-    public function backMenu()
+    public function updateRemark(Request $request, $timeId)
     {
-        return redirect('http://172.22.64.11/menu.php');
+        $validated = $request->validate([
+            'remark' => 'nullable|string|max:500',
+        ]);
+
+        DB::table('TTIME_TBL')
+            ->where('TTIME_ID', $timeId) // ปรับชื่อ column ให้ตรงกับ primary key จริงของตาราง
+            ->update(['TTIME_REMK' => $validated['remark']]);
+
+        return back();
     }
 }
 
