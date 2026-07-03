@@ -60,7 +60,7 @@ class ServerRoomController extends Controller
         
         
         return Inertia::render('Dashboard/Report', [
-            'data' => $timeRecords,
+            'data' => $query,
             
         ]);
     }
