@@ -9,6 +9,7 @@ use Inertia\Inertia;  // ← ขาดตัวนี้
 use Symfony\Component\HttpKernel\Exception\HttpException;  // ← ขาดตัวนี้
 use Illuminate\Http\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 return Application::configure(basePath: dirname(__DIR__))
     ->withRouting(
@@ -23,10 +24,15 @@ return Application::configure(basePath: dirname(__DIR__))
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-         $exceptions->respond(function (Response $response, \Throwable $e, Request $request) {
-        $status = $response->getStatusCode(); // ← ดึง status จาก $response ไม่ใช่ $e
+    $exceptions->respond(function (Response $response, \Throwable $e, Request $request) {
+        
+        // ถ้าเป็น redirect → ให้ผ่านเลย ห้าม intercept
+        if ($response instanceof RedirectResponse) {
+            return $response;
+        }
 
-        $pages = [403, 404, 500, 503];
+        $status = $response->getStatusCode();
+        $pages  = [403, 404, 500, 503];
 
         if (in_array($status, $pages)) {
             return \Inertia\Inertia::render("Error/{$status}", [
@@ -37,7 +43,6 @@ return Application::configure(basePath: dirname(__DIR__))
             ->setStatusCode($status);
         }
 
-        return $response; // ← คืน $response ตัวเดิม ไม่ใช่ null
+        return $response;
     });
-
-    })->create();
+})->create();

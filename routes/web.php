@@ -14,3 +14,8 @@ Route::get('/back-menu', [ServerRoomController::class, 'backMenu'])->name('back-
 // routes/web.php
 Route::patch('/time-records/{timeId}/remark', [ServerRoomController::class, 'updateRemark'])
     ->name('time-records.update-remark');
+
+
+Route::get('/test-layout', function () {
+    return Inertia::render('TestLayout/TestPage');
+})->name('test-layout');

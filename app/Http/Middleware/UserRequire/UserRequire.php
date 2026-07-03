@@ -15,15 +15,19 @@ class UserRequire
      */
    public function handle(Request $request, Closure $next)
     {
-        // Allow the first hit (URL has params) to pass through
-        if ($request->hasAny(['username', 'empno'])) {
-            return $next($request);
-        }
-
-        if (!$request->session()->has('user_info')) {
-            abort(403, 'Session expired or invalid.');
-        }
-
+    
+        // มี params → ให้ผ่าน
+    if ($request->hasAny(['username', 'empno'])) {
         return $next($request);
+    }
+
+    // ไม่มี params → ต้องมี flag ว่าเคยเข้าผ่าน params มาก่อน
+    if (!$request->session()->get('entered_via_params')) {
+        // ล้าง session แล้ว 403
+        $request->session()->invalidate();
+        abort(403, 'กรุณาเข้าผ่าน URL ที่กำหนดเท่านั้น');
+    }
+
+    return $next($request);
     }
 }

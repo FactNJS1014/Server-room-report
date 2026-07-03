@@ -15,15 +15,21 @@ class ServerRoomController extends Controller
     {
         // ── มี params → บันทึก session แล้ว redirect ──
         if ($request->filled('username')) {
-            $request->session()->put('user_info', [
-                'username'       => $request->query('username'),
-                'empno'          => $request->query('empno'),
-                'department'     => $request->query('department'),
-                'use_permission' => $request->query('USE_PERMISSION'),
-                'sec'            => $request->query('sec'),
-                'msect_id'       => $request->query('MSECT_ID'),
-            ]);
-            $request->session()->put('user_info_created_at', now()->timestamp);
+        // ล้าง session ทั้งหมดแล้วสร้างใหม่
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+
+    $request->session()->put('user_info', [
+        'username'       => $request->query('username'),
+        'empno'          => $request->query('empno'),
+        'department'     => $request->query('department'),
+        'use_permission' => $request->query('USE_PERMISSION'),
+        'sec'            => $request->query('sec'),
+        'msect_id'       => $request->query('MSECT_ID'),
+    ]);
+    $request->session()->put('user_info_created_at', now()->timestamp);
+    $request->session()->put('entered_via_params', true); // ← flag ว่าเข้าถูกต้อง
+
 
             return redirect()->route('report');
         }
