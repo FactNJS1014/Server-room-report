@@ -16,18 +16,19 @@ class UserRequire
    public function handle(Request $request, Closure $next)
     {
     
-        // มี params → ให้ผ่าน
+     // มี params → ให้ผ่านไป controller
     if ($request->hasAny(['username', 'empno'])) {
         return $next($request);
     }
 
-    // ไม่มี params → ต้องมี flag ว่าเคยเข้าผ่าน params มาก่อน
-    if (!$request->session()->get('entered_via_params')) {
-        // ล้าง session แล้ว 403
-        $request->session()->invalidate();
-        abort(403, 'กรุณาเข้าผ่าน URL ที่กำหนดเท่านั้น');
+    // redirect หลังจาก controller บันทึก session (flash จาก controller)
+    if ($request->session()->pull('just_logged_in', false)) {
+        return $next($request);
     }
 
-    return $next($request);
+    // ไม่มีทั้ง params และ flash → 403
+    $request->session()->invalidate();
+    $request->session()->regenerateToken();
+    abort(403, 'กรุณาเข้าผ่าน URL ที่กำหนดเท่านั้น');
     }
 }

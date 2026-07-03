@@ -13,9 +13,8 @@ class ServerRoomController extends Controller
     private const SESSION_EXPIRE_MINUTES = 60;
     public function getReportData(Request $request)
     {
-        // ── มี params → บันทึก session แล้ว redirect ──
-        if ($request->filled('username')) {
-        // ล้าง session ทั้งหมดแล้วสร้างใหม่
+        
+if ($request->filled('username')) {
     $request->session()->invalidate();
     $request->session()->regenerateToken();
 
@@ -28,11 +27,12 @@ class ServerRoomController extends Controller
         'msect_id'       => $request->query('MSECT_ID'),
     ]);
     $request->session()->put('user_info_created_at', now()->timestamp);
-    $request->session()->put('entered_via_params', true); // ← flag ว่าเข้าถูกต้อง
+    
+    // flash บอก middleware ว่า request ถัดไปให้ผ่าน
+    $request->session()->flash('just_logged_in', true);
 
-
-            return redirect()->route('report');
-        }
+    return redirect()->route('report');
+}
 
         // ── ตรวจสอบ session ──
         $userInfo  = $request->session()->get('user_info');

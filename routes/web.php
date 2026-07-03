@@ -19,3 +19,7 @@ Route::patch('/time-records/{timeId}/remark', [ServerRoomController::class, 'upd
 Route::get('/test-layout', function () {
     return Inertia::render('TestLayout/TestPage');
 })->name('test-layout');
+
+Route::get('/imagepro', function () {
+    return Inertia::render('ImagePro/ImagePro');
+})->name('imagepro');
