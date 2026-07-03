@@ -14,7 +14,7 @@ const columns = [
     { key: 'remark', label: 'หมายเหตุ' },
 ];
 
-export default function ReportTable({ data, filters }: { data: any; filters: any }) {
+export default function ReportTable({ data }: { data: any}) {
     const rows = data.data; // array ของรายการในหน้านี้
     const [search, setSearch] = useState(filters?.search ?? '');
 

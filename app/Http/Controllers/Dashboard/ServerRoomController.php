@@ -50,27 +50,18 @@ class ServerRoomController extends Controller
             'e.FNameTh as first_name',
             'e.LNameTh as last_name'
         )
-        ->orderByDesc('t.TTIME_ISUDT');
+        ->orderByDesc('t.TTIME_ISUDT')
+        ->get();
         
 
-       // ค้นหา (optional)
-       if ($search = $request->input('search')) {
-           $query->where(function ($q) use ($search) {
-               $q->where('t.TTIME_EMPID', 'like', "%{$search}%")
-                 ->orWhere('e.FNameTh', 'like', "%{$search}%")
-                 ->orWhere('e.LNameTh', 'like', "%{$search}%");
-           });
-       }
+       
    
-       $timeRecords = $query->paginate(10)->withQueryString();
-
+      
         
         
         return Inertia::render('Dashboard/Report', [
             'data' => $timeRecords,
-            'filters' => [
-                'search' => $request->only(['search']),
-            ],
+            
         ]);
     }
 
