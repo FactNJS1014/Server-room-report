@@ -1,12 +1,14 @@
-// resources/js/Pages/Home.tsx
-
 import MainLayout from '@/layouts/MainLayout';
 import ReportTable from '@/components/TimeReport/ReportTable';
+import type { PaginatedData, Filters, TimeRecord } from '@/types/report';
 
-
-export default function Home({ data }: { data: any[] }) {
-    
-
+export default function Report({
+    data,
+    filters,
+}: {
+    data: PaginatedData<TimeRecord>;
+    filters: Filters;
+}) {
     return (
         <MainLayout title="Report">
             <div className="mx-auto max-w-full space-y-6 p-6">
@@ -15,10 +17,10 @@ export default function Home({ data }: { data: any[] }) {
                         <h1 className="text-xl font-semibold text-gray-900 dark:text-white">รายงานเวลาเข้า-ออกงาน</h1>
                         <p className="text-sm text-gray-500 dark:text-gray-100">แสดงรายการบันทึกเวลาเข้า-ออกงานของพนักงาน</p>
                     </div>
-                    <p className="text-sm text-gray-900 dark:text-gray-100">ทั้งหมด {data.length} รายการ</p>
+                    <p className="text-sm text-gray-900 dark:text-gray-100">ทั้งหมด {data.total} รายการ</p>
                 </div>
 
-                <ReportTable data={data}  />
+                <ReportTable paginatedData={data} filters={filters} />
             </div>
         </MainLayout>
     );

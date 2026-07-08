@@ -39,7 +39,7 @@ class HandleInertiaRequests extends Middleware
     {
         return [
             ...parent::share($request),
-            'userInfo' => $request->session()->get('user_info'),
+            'userInfo' => $request->session()->get('user_session'),
         ];
     }
 }
