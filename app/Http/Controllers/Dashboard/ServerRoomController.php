@@ -11,7 +11,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 class ServerRoomController extends Controller
 {
     private const SESSION_EXPIRE_MINUTES = 60;
-    private const MAX_RECORDS = 100; // ← เปลี่ยนจาก 50 เป็น 100
+    // private const MAX_RECORDS = 100; // ← เปลี่ยนจาก 50 เป็น 100
 
     public function getReportData(Request $request)
     {
@@ -97,8 +97,8 @@ class ServerRoomController extends Controller
                 'e.LNameTh as last_name',
                 't.TTIME_ID as time_id'
             )
-            ->orderByDesc('t.TTIME_ISUDT') // เอาแถวล่าสุดก่อนเสมอ ไม่ว่าจะ sort คอลัมน์ไหนทีหลัง
-            ->limit(self::MAX_RECORDS);
+            ->orderByDesc('t.TTIME_ISUDT'); // เอาแถวล่าสุดก่อนเสมอ ไม่ว่าจะ sort คอลัมน์ไหนทีหลัง
+            // ->limit(self::MAX_RECORDS);
 
         $records = collect(DB::select($limitedQuery->toSql(), $limitedQuery->getBindings()));
 
